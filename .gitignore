@@ -8,3 +8,6 @@ venv/
 # large generated samples - recreate with: python make_samples.py
 samples/calib_synth/
 samples/synthetic_video.mp4
+
+# local tool config
+.claude/

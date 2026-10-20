@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>DocScan</title>
+  <meta name="description" content="Scan documents from photos or a live camera with classical computer vision.">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='9' fill='%234f46e5'/%3E%3Cpath d='M9 13v-2.5A1.5 1.5 0 0 1 10.5 9H13M19 9h2.5a1.5 1.5 0 0 1 1.5 1.5V13M23 19v2.5a1.5 1.5 0 0 1-1.5 1.5H19M13 23h-2.5A1.5 1.5 0 0 1 9 21.5V19M12 16h8' fill='none' stroke='white' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E">
+  <script>
+    // apply the theme before first paint so there is no flash of the wrong colours
+    (function () {
+      var t = 'system';
+      try { t = (JSON.parse(localStorage.getItem('docscan.settings') || '{}').theme) || 'system'; } catch (e) {}
+      var dark = t === 'dark' || (t === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches);
+      document.documentElement.setAttribute('data-theme', dark ? 'dark' : 'light');
+    })();
+  </script>
+  <link rel="stylesheet" href="/static/css/app.css">
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar" id="sidebar" aria-label="Main navigation"></aside>
+    <main class="main"><div class="view" id="view"></div></main>
+  </div>
+  <nav class="tabbar" id="tabbar" aria-label="Main navigation"></nav>
+  <div class="toasts" id="toasts" role="status" aria-live="polite"></div>
+  <script type="module" src="/static/js/app.js"></script>
+</body>
+</html>

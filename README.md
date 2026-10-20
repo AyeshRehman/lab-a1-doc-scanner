@@ -15,6 +15,35 @@ pip install -r requirements.txt
 python make_samples.py          # synthetic photos, video, chessboard + calibration views
 ```
 
+## Web app (easiest way to use it)
+
+```bash
+python app.py                   # opens http://127.0.0.1:8000
+```
+
+| Page | What you can do |
+|---|---|
+| **Scan** | Drop, browse or paste (Ctrl+V) photos - several at once. Try the built-in sample. |
+| **Editor** | Drag corners or whole edges (with a magnifier), auto-detect, use the whole photo, undo; choose Colour / Gray / B&W / Original, page size, straighten text, remove punch holes, rotate; download PNG / JPG / PDF. |
+| **Live camera** | Webcam in the browser, an IP/RTSP camera or a video file. Steady-hold detection, auto-capture, debug view of edges and the paper mask. |
+| **Library** | Search, sort, multi-select, export many scans as one PDF or a ZIP, delete. |
+| **Align to template** | ORB / SIFT keypoint matching to line a photo up with a clean original; matches and difference views. |
+| **Calibrate camera** | Chessboard capture (camera or uploads), solve, compare before/after, apply lens correction to camera scans. |
+| **How it works** | Every pipeline step on your own scan, and one figure per Module A1 topic. |
+| **Settings** | Light / dark / system theme, defaults for new scans, camera options, storage, keyboard shortcuts. |
+
+Scans are stored in `outputs/library/`. Preferences live in the browser.
+
+### Adding a page later
+
+1. Create `webapp/static/js/views/<name>.js` exporting `default { mount(root, ctx) { ...; return cleanup } }`.
+2. Add one line to `PAGES` in `webapp/static/js/app.js` (`nav: 'main' | 'tools' | 'footer'` decides where the link goes).
+3. Put any new server routes in `webapp/server.py` under `/api/...` and a client call in `webapp/static/js/lib/api.js`.
+
+Shared building blocks are in `webapp/static/js/lib/ui.js` (buttons, segmented controls, toggles, dialogs, menus,
+toasts, dropzone, lightbox, compare slider) and all colours are CSS variables at the top of `webapp/static/css/app.css`,
+so new pages get both themes for free.
+
 ## Run it
 
 | What | Command |
@@ -31,7 +60,7 @@ python make_samples.py          # synthetic photos, video, chessboard + calibrat
 | Use calibration | `python scan_live.py --calib outputs/calib.npz` |
 | Align to a known form (ORB/SIFT) | `python align_to_template.py --template samples/templates/synthetic_page.png --image samples/photos/synthetic_photo.jpg --method sift` |
 | Tour of every A1 topic (figures) | `python module_tour.py` → `outputs/tour/` |
-| Tests | `python tests/test_docscan.py` (or `python -m pytest -q`) |
+| Tests | `python tests/test_docscan.py` and `python tests/test_webapp.py` (or `python -m pytest -q`) |
 
 **Live keys:** `SPACE`/`s` save · `m` cycle mode · `a` auto-capture · `d` debug window (edges, mask, candidates) · `u` undistortion on/off · `q` quit.
 
@@ -80,6 +109,8 @@ With `--auto` a scan is saved once per steady hold.
 ## Project layout
 
 ```
+app.py              starts the web app
+webapp/             Flask API (server.py, storage.py, pdf.py, streams.py) + static/ frontend
 docscan/            library (one module per topic group)
 scan_image.py       still images (batch, debug montage, manual corners)
 scan_live.py        webcam / video / RTSP with tracking + auto-capture
