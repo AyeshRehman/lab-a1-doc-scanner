@@ -1,0 +1,10 @@
+__pycache__/
+*.pyc
+.pytest_cache/
+outputs/
+.venv/
+venv/
+
+# large generated samples - recreate with: python make_samples.py
+samples/calib_synth/
+samples/synthetic_video.mp4
